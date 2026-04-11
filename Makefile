@@ -2,9 +2,15 @@ derle: topla
 topla: main.o zaman.o pugi.o
 	g++ ./lib/main.o  ./lib/zaman.o ./lib/pugi.o -o Vasati
 
+test: test_zaman.o zaman.o pugi.o
+	g++ ./lib/test_zaman.o ./lib/zaman.o ./lib/pugi.o -o VasatiTest
+
+test_zaman.o:
+	g++ -I "./include" -c ./tests/test_zaman.cpp -o ./lib/test_zaman.o
+
 main.o:
 	g++ -I "./include" -c ./src/main.cpp -o ./lib/main.o
 zaman.o:
-	g++ -I "./include" -c ./src/src-class/zaman.cpp -o ./lib/zaman.o
+	g++ -I "./include" -c ./src/src-class/Zaman.cpp -o ./lib/zaman.o
 pugi.o:
 	g++ -I "./include/packages/pugixml-1.9/src" -c ./include/packages/pugixml-1.9/src/pugixml.cpp -o ./lib/pugi.o
