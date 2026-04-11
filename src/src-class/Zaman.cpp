@@ -14,7 +14,7 @@
 #ifndef SOURCE_ZAMAN_CPP
 #define SOURCE_ZAMAN_CPP
 
-#include "include-class/zaman.hpp"
+#include "include-class/Zaman.hpp"
 
 void zaman::tkvm_h_v_d()
 {
@@ -50,7 +50,7 @@ void zaman::tkvm_turk_v_d()
 void zaman::vkt_h_v_d()
 {
 	
-	zaman::dosya_adresi    = "include/XML/vakitler.xml";
+	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
 	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
 	zaman::sehir           = dosya.child("cityinfo")   ;
 
