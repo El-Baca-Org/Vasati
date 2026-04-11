@@ -14,7 +14,9 @@
 #ifndef SOURCE_ZAMAN_CPP
 #define SOURCE_ZAMAN_CPP
 
-#include "include-class/zaman.hpp"
+#include "include-class/Zaman.hpp"
+
+constexpr int MINS_PER_DAY = 1440;
 
 void zaman::tkvm_h_v_d()
 {
@@ -32,7 +34,7 @@ void zaman::tkvm_h_v_d()
 void zaman::tkvm_turk_v_d()
 {
 	zaman::rakam_gun_haftanin = zaman::h_rakam_gun_haftanin;
-    
+
 	{
 	//hicri seneyi bulma algoritması.
 	int a_rakami      = zaman::h_rakam_sene - 621              ;
@@ -49,7 +51,7 @@ void zaman::tkvm_turk_v_d()
 
 void zaman::vkt_h_v_d()
 {
-	
+
 	zaman::dosya_adresi    = "include/XML/vakitler.xml";
 	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
 	zaman::sehir           = dosya.child("cityinfo")   ;
@@ -104,16 +106,16 @@ void zaman::vkt_turk_v_d()
 	zaman::istibak_nucum_td = zaman::h_istibak_nucum_td  - zaman::h_aksam_td        ;
 	zaman::yatsi_td         = zaman::h_yatsi_td          - zaman::h_aksam_td        ;
 	zaman::isa_sani_td      = zaman::h_isa_sani_td       - zaman::h_aksam_td        ;
-	zaman::imsak_td         = (1440 - zaman::h_aksam_td) + zaman::h_imsak_td        ; //1440 bir günün toplam dakikası
-	zaman::sabah_td         = (1440 - zaman::h_aksam_td) + zaman::h_sabah_td        ;
-	zaman::gunes_td         = (1440 - zaman::h_aksam_td) + zaman::h_gunes_td        ;
-	zaman::israk_td         = (1440 - zaman::h_aksam_td) + zaman::h_israk_td        ;
-	zaman::kerahet_td       = (1440 - zaman::h_aksam_td) + zaman::h_kerahet_td      ;
-	zaman::ogle_td          = (1440 - zaman::h_aksam_td) + zaman::h_ogle_td         ;
-	zaman::ikindi_td        = (1440 - zaman::h_aksam_td) + zaman::h_ikindi_td       ;
-	zaman::asr_sani_td      = (1440 - zaman::h_aksam_td) + zaman::h_asr_sani_td     ;
-	zaman::isfirar_sems_td  = (1440 - zaman::h_aksam_td) + zaman::h_isfirar_sems_td ;
-	zaman::kible_saati_td   = (1440 - zaman::h_aksam_td) + zaman::h_kible_saati_td  ;
+	zaman::imsak_td         = (MINS_PER_DAY - zaman::h_aksam_td) + zaman::h_imsak_td        ; // MINS_PER_DAY bir günün toplam dakikası
+	zaman::sabah_td         = (MINS_PER_DAY - zaman::h_aksam_td) + zaman::h_sabah_td        ;
+	zaman::gunes_td         = (MINS_PER_DAY - zaman::h_aksam_td) + zaman::h_gunes_td        ;
+	zaman::israk_td         = (MINS_PER_DAY - zaman::h_aksam_td) + zaman::h_israk_td        ;
+	zaman::kerahet_td       = (MINS_PER_DAY - zaman::h_aksam_td) + zaman::h_kerahet_td      ;
+	zaman::ogle_td          = (MINS_PER_DAY - zaman::h_aksam_td) + zaman::h_ogle_td         ;
+	zaman::ikindi_td        = (MINS_PER_DAY - zaman::h_aksam_td) + zaman::h_ikindi_td       ;
+	zaman::asr_sani_td      = (MINS_PER_DAY - zaman::h_aksam_td) + zaman::h_asr_sani_td     ;
+	zaman::isfirar_sems_td  = (MINS_PER_DAY - zaman::h_aksam_td) + zaman::h_isfirar_sems_td ;
+	zaman::kible_saati_td   = (MINS_PER_DAY - zaman::h_aksam_td) + zaman::h_kible_saati_td  ;
 
 	zaman::aksam = "00:00";
 	zaman::istibak_nucum.append( std::to_string(int(istibak_nucum_td / 60)%12)  + ":" + std::to_string(int(istibak_nucum_td % 60)));
@@ -141,8 +143,8 @@ void zaman::sat_h_v_d()
 void zaman::sat_turk_v_d()
 {
 	zaman::h_zaman_td  = ((zaman::h_saat * 60) * 60)      + (zaman::h_dakika * 60) + zaman::h_saniye;
-	zaman::zaman_td    = ((1440 - zaman::h_aksam_td) * 60) + zaman::h_zaman_td                      ; 
-	
+	zaman::zaman_td    = ((MINS_PER_DAY - zaman::h_aksam_td) * 60) + zaman::h_zaman_td                      ;
+
 	zaman::saat      =  int((( zaman::zaman_td   / 60) / 60 ) % 12);
 	zaman::dakika    =  int((  zaman::zaman_td   / 60) % 60 )      ;
 	zaman::saniye    =  int((  zaman::zaman_td ) % 60)             ;
@@ -156,7 +158,7 @@ void zaman::sat_turk_v_d()
 
 void zaman::h_v_d()
 {
-	tkvm_h_v_d()     ;	
+	tkvm_h_v_d()     ;
 	vkt_h_v_d ()     ;
 	sat_h_v_d ()     ;
 };
@@ -257,6 +259,6 @@ zaman::~zaman()
  * if any hostility against Turkey is identified. This license and its
  * terms must be cited without omission in any redistributed or derivative
  * works. The code cannot be sold or used for commercial profit.
- * 
+ *
  * -e-
  */
