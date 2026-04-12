@@ -1,0 +1,4 @@
+Vasati
+lib/
+*.o
+tests/test_runner
