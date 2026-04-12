@@ -54,10 +54,8 @@ void zaman::vkt_h_v_d()
 	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
 	zaman::sehir           = dosya.child("cityinfo")   ;
 
-	char buffer[5];
-
-	std::sprintf             (buffer, "%d", zaman::h_rakam_gun_senenin);
-	const char *h_rakam_gun_senenin_string  = buffer                   ;
+	std::string h_rakam_gun_senenin_string_obj = std::to_string(zaman::h_rakam_gun_senenin);
+	const char *h_rakam_gun_senenin_string = h_rakam_gun_senenin_string_obj.c_str();
 	zaman::xml_bu_gun        = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string).text().get();
 
 	zaman::h_aksam         = zaman::xml_bu_gun.substr(50, 6);
@@ -67,8 +65,8 @@ void zaman::vkt_h_v_d()
 
 	//buradaka kodları yeniliyoruz çünkü bir sonraki gün kılacağız verileri:
 
-	std::sprintf               (buffer, "%d", (zaman::h_rakam_gun_senenin + 1));
-	h_rakam_gun_senenin_string = buffer;
+	h_rakam_gun_senenin_string_obj = std::to_string(zaman::h_rakam_gun_senenin + 1);
+	h_rakam_gun_senenin_string = h_rakam_gun_senenin_string_obj.c_str();
 	zaman::xml_bu_gun          = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string).text().get();
 
 	zaman::h_imsak          = zaman::xml_bu_gun.substr(0, 4) ;
