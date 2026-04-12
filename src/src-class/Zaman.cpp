@@ -14,7 +14,7 @@
 #ifndef SOURCE_ZAMAN_CPP
 #define SOURCE_ZAMAN_CPP
 
-#include "include-class/zaman.hpp"
+#include "include-class/Zaman.hpp"
 
 void zaman::tkvm_h_v_d()
 {
@@ -50,15 +50,34 @@ void zaman::tkvm_turk_v_d()
 void zaman::vkt_h_v_d()
 {
 	
-	zaman::dosya_adresi    = "include/XML/vakitler.xml";
-	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
+	if(zaman::dosya_adresi == nullptr){
+		zaman::dosya_adresi    = "include/XML/Vakitler.xml";
+	}
+	pugi::xml_parse_result result = zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
+	if (!result) {
+		std::cerr << "XML Error: " << result.description() << std::endl;
+		return;
+	}
 	zaman::sehir           = dosya.child("cityinfo")   ;
+	if (!zaman::sehir) {
+		std::cerr << "XML Error: cityinfo node not found." << std::endl;
+		return;
+	}
 
 	char buffer[5];
 
 	std::sprintf             (buffer, "%d", zaman::h_rakam_gun_senenin);
 	const char *h_rakam_gun_senenin_string  = buffer                   ;
-	zaman::xml_bu_gun        = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string).text().get();
+	pugi::xml_node pt_node = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string);
+	if (!pt_node) {
+		std::cerr << "XML Error: prayertimes node for today not found." << std::endl;
+		return;
+	}
+	zaman::xml_bu_gun        = pt_node.text().get();
+	if (zaman::xml_bu_gun.length() < 74) {
+		std::cerr << "XML Error: prayer times string too short for today." << std::endl;
+		return;
+	}
 
 	zaman::h_aksam         = zaman::xml_bu_gun.substr(50, 6);
 	zaman::h_istibak_nucum = zaman::xml_bu_gun.substr(56, 6);
@@ -69,7 +88,16 @@ void zaman::vkt_h_v_d()
 
 	std::sprintf               (buffer, "%d", (zaman::h_rakam_gun_senenin + 1));
 	h_rakam_gun_senenin_string = buffer;
-	zaman::xml_bu_gun          = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string).text().get();
+	pt_node = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string);
+	if (!pt_node) {
+		std::cerr << "XML Error: prayertimes node for tomorrow not found." << std::endl;
+		return;
+	}
+	zaman::xml_bu_gun          = pt_node.text().get();
+	if (zaman::xml_bu_gun.length() < 80) {
+		std::cerr << "XML Error: prayer times string too short for tomorrow." << std::endl;
+		return;
+	}
 
 	zaman::h_imsak          = zaman::xml_bu_gun.substr(0, 4) ;
 	zaman::h_sabah          = zaman::xml_bu_gun.substr(5, 5) ;
@@ -240,6 +268,15 @@ zaman::zaman()
 
 	gos_turk_v();
 	gos_h_v();
+}
+zaman::zaman(const char* test_xml_path)
+{
+	dosya_adresi = test_xml_path;
+	// Sadece takvim ve saati başlatıyoruz, vkt_h_v_d() testte elle çağrılacak ki gün önceden değiştirilebilsin.
+	tkvm_h_v_d();
+	sat_h_v_d();
+	tkvm_turk_v_d();
+	sat_turk_v_d();
 }
 zaman::~zaman()
 {

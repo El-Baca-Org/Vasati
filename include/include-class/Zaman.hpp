@@ -28,7 +28,7 @@ public:
 	//ASAGIDAKI DEGISKENLER DOSYA ISLEMLERIYLE ILISKILIDIR;
 	//------------------------------------------------------------------------------
 	pugi::xml_document dosya;
-	const char* dosya_adresi;
+	const char* dosya_adresi = nullptr;
 	const char* bu_gun_const;
 	pugi::xml_node sehir;
 	std::string bu_gun_deger;
@@ -159,6 +159,7 @@ public:
 	void gos_h_v()    ;
 
 	zaman() ;
+	zaman(const char* test_xml_path);
 	~zaman();
 };
 #endif
