@@ -8,3 +8,7 @@ zaman.o:
 	g++ -I "./include" -c ./src/src-class/Zaman.cpp -o ./lib/zaman.o
 pugi.o:
 	g++ -I "./include/packages/pugixml-1.9/src" -c ./include/packages/pugixml-1.9/src/pugixml.cpp -o ./lib/pugi.o
+
+test: zaman.o pugi.o
+	g++ -I "./include" ./tests/test_zaman.cpp ./lib/zaman.o ./lib/pugi.o -o RunTests
+	./RunTests
