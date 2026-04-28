@@ -136,7 +136,7 @@ public:
 	unsigned int asr_sani_td       ;
 	unsigned int isfirar_sems_td   ;
 	unsigned int kible_saati_td    ;
-	
+
 	unsigned int h_zaman_td      ;
 	unsigned int zaman_td        ;
 
@@ -145,7 +145,7 @@ public:
 
 	void h_v_d()    ;
 	void turk_v_d() ;
-	
+
 	void tkvm_h_v_d()    ;
 	void tkvm_turk_v_d() ;
 
@@ -174,7 +174,6 @@ public:
  * if any hostility against Turkey is identified. This license and its
  * terms must be cited without omission in any redistributed or derivative
  * works. The code cannot be sold or used for commercial profit.
- * 
+ *
  * -e-
  */
-

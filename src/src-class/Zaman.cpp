@@ -32,7 +32,7 @@ void zaman::tkvm_h_v_d()
 void zaman::tkvm_turk_v_d()
 {
 	zaman::rakam_gun_haftanin = zaman::h_rakam_gun_haftanin;
-    
+
 	{
 	//hicri seneyi bulma algoritması.
 	int a_rakami      = zaman::h_rakam_sene - 621              ;
@@ -49,7 +49,7 @@ void zaman::tkvm_turk_v_d()
 
 void zaman::vkt_h_v_d()
 {
-	
+
 	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
 	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
 	zaman::sehir           = dosya.child("cityinfo")   ;
@@ -141,8 +141,8 @@ void zaman::sat_h_v_d()
 void zaman::sat_turk_v_d()
 {
 	zaman::h_zaman_td  = ((zaman::h_saat * 60) * 60)      + (zaman::h_dakika * 60) + zaman::h_saniye;
-	zaman::zaman_td    = ((1440 - zaman::h_aksam_td) * 60) + zaman::h_zaman_td                      ; 
-	
+	zaman::zaman_td    = ((1440 - zaman::h_aksam_td) * 60) + zaman::h_zaman_td                      ;
+
 	zaman::saat      =  int((( zaman::zaman_td   / 60) / 60 ) % 12);
 	zaman::dakika    =  int((  zaman::zaman_td   / 60) % 60 )      ;
 	zaman::saniye    =  int((  zaman::zaman_td ) % 60)             ;
@@ -156,7 +156,7 @@ void zaman::sat_turk_v_d()
 
 void zaman::h_v_d()
 {
-	tkvm_h_v_d()     ;	
+	tkvm_h_v_d()     ;
 	vkt_h_v_d ()     ;
 	sat_h_v_d ()     ;
 };
@@ -241,7 +241,9 @@ zaman::zaman()
 	gos_turk_v();
 	gos_h_v();
 }
-zaman::~zaman() = default;
+zaman::~zaman()
+{
+}
 
 #endif
 
@@ -255,6 +257,6 @@ zaman::~zaman() = default;
  * if any hostility against Turkey is identified. This license and its
  * terms must be cited without omission in any redistributed or derivative
  * works. The code cannot be sold or used for commercial profit.
- * 
+ *
  * -e-
  */
