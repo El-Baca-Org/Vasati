@@ -155,6 +155,8 @@ public:
 	void sat_h_v_d()    ;
 	void sat_turk_v_d() ;
 
+	unsigned int parse_to_minutes(const std::string& s);
+
 	void gos_turk_v() ;
 	void gos_h_v()    ;
 
