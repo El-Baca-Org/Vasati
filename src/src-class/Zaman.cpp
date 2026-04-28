@@ -15,6 +15,7 @@
 #define SOURCE_ZAMAN_CPP
 
 #include "include-class/Zaman.hpp"
+#include <cstdio>
 
 void zaman::tkvm_h_v_d()
 {
@@ -32,7 +33,7 @@ void zaman::tkvm_h_v_d()
 void zaman::tkvm_turk_v_d()
 {
 	zaman::rakam_gun_haftanin = zaman::h_rakam_gun_haftanin;
-    
+
 	{
 	//hicri seneyi bulma algoritması.
 	int a_rakami      = zaman::h_rakam_sene - 621              ;
@@ -49,7 +50,7 @@ void zaman::tkvm_turk_v_d()
 
 void zaman::vkt_h_v_d()
 {
-	
+
 	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
 	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
 	zaman::sehir           = dosya.child("cityinfo")   ;
@@ -115,20 +116,48 @@ void zaman::vkt_turk_v_d()
 	zaman::isfirar_sems_td  = (1440 - zaman::h_aksam_td) + zaman::h_isfirar_sems_td ;
 	zaman::kible_saati_td   = (1440 - zaman::h_aksam_td) + zaman::h_kible_saati_td  ;
 
+	char buffer[10];
+
 	zaman::aksam = "00:00";
-	zaman::istibak_nucum.append( std::to_string(int(istibak_nucum_td / 60)%12)  + ":" + std::to_string(int(istibak_nucum_td % 60)));
-	zaman::yatsi.append(         std::to_string(int(yatsi_td / 60)%12)          + ":" + std::to_string(int(yatsi_td % 60)))        ;
-	zaman::isa_sani.append(      std::to_string(int(isa_sani_td / 60)%12)       + ":" + std::to_string(int(isa_sani_td % 60)))     ;
-	zaman::imsak.append(         std::to_string(int(imsak_td / 60)%12)          + ":" + std::to_string(int(imsak_td % 60)))        ;
-	zaman::sabah.append(         std::to_string(int(sabah_td / 60)%12)          + ":" + std::to_string(int(sabah_td % 60)))        ;
-	zaman::gunes.append(         std::to_string(int(gunes_td / 60)%12)          + ":" + std::to_string(int(gunes_td % 60)))        ;
-	zaman::israk.append(         std::to_string(int(israk_td / 60)%12)          + ":" + std::to_string(int(israk_td % 60)))        ;
-	zaman::kerahet.append(       std::to_string(int(kerahet_td / 60)%12)        + ":" + std::to_string(int(kerahet_td % 60)))      ;
-	zaman::ogle.append(          std::to_string(int(ogle_td / 60)%12)           + ":" + std::to_string(int(ogle_td % 60)))         ;
-	zaman::ikindi.append(        std::to_string(int(ikindi_td / 60)%12)         + ":" + std::to_string(int(ikindi_td % 60)))       ;
-	zaman::asr_sani.append(      std::to_string(int(asr_sani_td / 60)%12)       + ":" + std::to_string(int(asr_sani_td % 60)))     ;
-	zaman::isfirar_sems.append(  std::to_string(int(isfirar_sems_td / 60)%12)   + ":" + std::to_string(int(isfirar_sems_td % 60))) ;
-	zaman::kible_saati.append(   std::to_string(int(kible_saati_td / 60)%12)    + ":" + std::to_string(int(kible_saati_td % 60)))  ;
+
+	std::sprintf(buffer, "%d:%02d", int(istibak_nucum_td / 60)%12, int(istibak_nucum_td % 60));
+	zaman::istibak_nucum = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(yatsi_td / 60)%12, int(yatsi_td % 60));
+	zaman::yatsi = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(isa_sani_td / 60)%12, int(isa_sani_td % 60));
+	zaman::isa_sani = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(imsak_td / 60)%12, int(imsak_td % 60));
+	zaman::imsak = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(sabah_td / 60)%12, int(sabah_td % 60));
+	zaman::sabah = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(gunes_td / 60)%12, int(gunes_td % 60));
+	zaman::gunes = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(israk_td / 60)%12, int(israk_td % 60));
+	zaman::israk = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(kerahet_td / 60)%12, int(kerahet_td % 60));
+	zaman::kerahet = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(ogle_td / 60)%12, int(ogle_td % 60));
+	zaman::ogle = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(ikindi_td / 60)%12, int(ikindi_td % 60));
+	zaman::ikindi = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(asr_sani_td / 60)%12, int(asr_sani_td % 60));
+	zaman::asr_sani = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(isfirar_sems_td / 60)%12, int(isfirar_sems_td % 60));
+	zaman::isfirar_sems = buffer;
+
+	std::sprintf(buffer, "%d:%02d", int(kible_saati_td / 60)%12, int(kible_saati_td % 60));
+	zaman::kible_saati = buffer;
 
 };
 
@@ -141,8 +170,8 @@ void zaman::sat_h_v_d()
 void zaman::sat_turk_v_d()
 {
 	zaman::h_zaman_td  = ((zaman::h_saat * 60) * 60)      + (zaman::h_dakika * 60) + zaman::h_saniye;
-	zaman::zaman_td    = ((1440 - zaman::h_aksam_td) * 60) + zaman::h_zaman_td                      ; 
-	
+	zaman::zaman_td    = ((1440 - zaman::h_aksam_td) * 60) + zaman::h_zaman_td                      ;
+
 	zaman::saat      =  int((( zaman::zaman_td   / 60) / 60 ) % 12);
 	zaman::dakika    =  int((  zaman::zaman_td   / 60) % 60 )      ;
 	zaman::saniye    =  int((  zaman::zaman_td ) % 60)             ;
@@ -156,7 +185,7 @@ void zaman::sat_turk_v_d()
 
 void zaman::h_v_d()
 {
-	tkvm_h_v_d()     ;	
+	tkvm_h_v_d()     ;
 	vkt_h_v_d ()     ;
 	sat_h_v_d ()     ;
 };
@@ -257,6 +286,6 @@ zaman::~zaman()
  * if any hostility against Turkey is identified. This license and its
  * terms must be cited without omission in any redistributed or derivative
  * works. The code cannot be sold or used for commercial profit.
- * 
+ *
  * -e-
  */
