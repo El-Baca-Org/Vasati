@@ -53,8 +53,6 @@ public:
 	unsigned int rakam_ay;
 	unsigned int rakam_sene;
 	//------------------------------------------------------------------------------
-	std::string h_isim_ay;
-	//------------------------------------------------------------------------------
 	unsigned int h_rakam_gun_senenin;
 	unsigned int h_rakam_gun_ayin;
 	unsigned int h_rakam_gun_haftanin;
