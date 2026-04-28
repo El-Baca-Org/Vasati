@@ -1,0 +1,4 @@
+Vasati
+RunTests
+*.o
+lib/*.o
