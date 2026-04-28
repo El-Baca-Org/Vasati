@@ -19,6 +19,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include <cctype>
 #include "packages/pugixml-1.9/src/pugixml.hpp"
 
 class zaman
@@ -155,13 +156,15 @@ public:
 	void sat_h_v_d()    ;
 	void sat_turk_v_d() ;
 
-	unsigned int parse_to_minutes(const std::string& s);
-
 	void gos_turk_v() ;
 	void gos_h_v()    ;
 
 	zaman() ;
 	~zaman();
+
+private:
+	unsigned int vakt_to_td(const std::string& vakt);
+	std::string td_to_vakt(unsigned int td);
 };
 #endif
 
