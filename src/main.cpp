@@ -11,12 +11,12 @@
  * [Copyright (C) 2006-2018, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)]
  */
 
-#include "include-class/zaman.hpp"
+#include "include-class/Zaman.hpp"
 
 int main()
 {
 		zaman baslat;
-		
+
 		std::cout<<"cikmak icin enter'a basiniz"<<std::endl;
 		std::cin.get();
 }
@@ -31,6 +31,6 @@ int main()
  * if any hostility against Turkey is identified. This license and its
  * terms must be cited without omission in any redistributed or derivative
  * works. The code cannot be sold or used for commercial profit.
- * 
+ *
  * -e-
  */
