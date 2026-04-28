@@ -14,22 +14,7 @@
 #ifndef SOURCE_ZAMAN_CPP
 #define SOURCE_ZAMAN_CPP
 
-#include "include-class/zaman.hpp"
-
-static inline int parse_time_to_minutes(const std::string& s) {
-	int h = 0, m = 0;
-	size_t i = 0;
-	while (i < s.length() && s[i] >= '0' && s[i] <= '9') {
-		h = h * 10 + (s[i] - '0');
-		i++;
-	}
-	if (i < s.length() && s[i] == ':') i++;
-	while (i < s.length() && s[i] >= '0' && s[i] <= '9') {
-		m = m * 10 + (s[i] - '0');
-		i++;
-	}
-	return h * 60 + m;
-}
+#include "include-class/Zaman.hpp"
 
 void zaman::tkvm_h_v_d()
 {
@@ -62,6 +47,23 @@ void zaman::tkvm_turk_v_d()
 	zaman::rakam_ay = 0; //yukardaki gibi keza.
 };
 
+
+static std::string safe_substr(const std::string& str, size_t pos, size_t len) {
+	if (pos >= str.length()) return "";
+	return str.substr(pos, len);
+}
+
+static unsigned int safe_stoi_td(const std::string& str, size_t h_pos, size_t h_len, size_t m_pos, size_t m_len) {
+	try {
+		std::string h_str = safe_substr(str, h_pos, h_len);
+		std::string m_str = safe_substr(str, m_pos, m_len);
+		if (h_str.empty() || m_str.empty()) return 0;
+		return (std::stoi(h_str) * 60) + std::stoi(m_str);
+	} catch (...) {
+		return 0;
+	}
+}
+
 void zaman::vkt_h_v_d()
 {
 
@@ -75,10 +77,10 @@ void zaman::vkt_h_v_d()
 	const char *h_rakam_gun_senenin_string  = buffer                   ;
 	zaman::xml_bu_gun        = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string).text().get();
 
-	zaman::h_aksam         = zaman::xml_bu_gun.substr(50, 6);
-	zaman::h_istibak_nucum = zaman::xml_bu_gun.substr(56, 6);
-	zaman::h_yatsi         = zaman::xml_bu_gun.substr(62, 6);
-	zaman::h_isa_sani      = zaman::xml_bu_gun.substr(68, 6);
+	zaman::h_aksam = safe_substr(zaman::xml_bu_gun, 50, 6);
+	zaman::h_istibak_nucum = safe_substr(zaman::xml_bu_gun, 56, 6);
+	zaman::h_yatsi = safe_substr(zaman::xml_bu_gun, 62, 6);
+	zaman::h_isa_sani = safe_substr(zaman::xml_bu_gun, 68, 6);
 
 	//buradaka kodları yeniliyoruz çünkü bir sonraki gün kılacağız verileri:
 
@@ -86,31 +88,31 @@ void zaman::vkt_h_v_d()
 	h_rakam_gun_senenin_string = buffer;
 	zaman::xml_bu_gun          = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string).text().get();
 
-	zaman::h_imsak          = zaman::xml_bu_gun.substr(0, 4) ;
-	zaman::h_sabah          = zaman::xml_bu_gun.substr(5, 5) ;
-	zaman::h_gunes          = zaman::xml_bu_gun.substr(10, 5);
-	zaman::h_israk          = zaman::xml_bu_gun.substr(15, 5);
-	zaman::h_kerahet        = zaman::xml_bu_gun.substr(20, 6);
-	zaman::h_ogle           = zaman::xml_bu_gun.substr(26, 6);
-	zaman::h_ikindi         = zaman::xml_bu_gun.substr(32, 6);
-	zaman::h_asr_sani       = zaman::xml_bu_gun.substr(38, 6);
-	zaman::h_isfirar_sems   = zaman::xml_bu_gun.substr(44, 6);
-	zaman::h_kible_saati    = zaman::xml_bu_gun.substr(74, 6);
+	zaman::h_imsak = safe_substr(zaman::xml_bu_gun, 0, 4);
+	zaman::h_sabah = safe_substr(zaman::xml_bu_gun, 5, 5);
+	zaman::h_gunes = safe_substr(zaman::xml_bu_gun, 10, 5);
+	zaman::h_israk = safe_substr(zaman::xml_bu_gun, 15, 5);
+	zaman::h_kerahet = safe_substr(zaman::xml_bu_gun, 20, 6);
+	zaman::h_ogle = safe_substr(zaman::xml_bu_gun, 26, 6);
+	zaman::h_ikindi = safe_substr(zaman::xml_bu_gun, 32, 6);
+	zaman::h_asr_sani = safe_substr(zaman::xml_bu_gun, 38, 6);
+	zaman::h_isfirar_sems = safe_substr(zaman::xml_bu_gun, 44, 6);
+	zaman::h_kible_saati = safe_substr(zaman::xml_bu_gun, 74, 6);
 
-	zaman::h_aksam_td             = parse_time_to_minutes(h_aksam)         ;
-	zaman::h_istibak_nucum_td     = parse_time_to_minutes(h_istibak_nucum) ;
-	zaman::h_yatsi_td             = parse_time_to_minutes(h_yatsi)         ;
-	zaman::h_isa_sani_td          = parse_time_to_minutes(h_isa_sani)      ;
-	zaman::h_imsak_td             = parse_time_to_minutes(h_imsak)         ;
-	zaman::h_sabah_td             = parse_time_to_minutes(h_sabah)         ;
-	zaman::h_gunes_td             = parse_time_to_minutes(h_gunes)         ;
-	zaman::h_israk_td             = parse_time_to_minutes(h_israk)         ;
-	zaman::h_kerahet_td           = parse_time_to_minutes(h_kerahet)       ;
-	zaman::h_ogle_td              = parse_time_to_minutes(h_ogle)          ;
-	zaman::h_ikindi_td            = parse_time_to_minutes(h_ikindi)        ;
-	zaman::h_asr_sani_td          = parse_time_to_minutes(h_asr_sani)      ;
-	zaman::h_isfirar_sems_td      = parse_time_to_minutes(h_isfirar_sems)  ;
-	zaman::h_kible_saati_td       = parse_time_to_minutes(h_kible_saati)   ;
+	zaman::h_aksam_td = safe_stoi_td(h_aksam, 0, 2, 3, 5);
+	zaman::h_istibak_nucum_td = safe_stoi_td(h_istibak_nucum, 0, 2, 3, 5);
+	zaman::h_yatsi_td = safe_stoi_td(h_yatsi, 0, 2, 3, 5);
+	zaman::h_isa_sani_td = safe_stoi_td(h_isa_sani, 0, 2, 3, 5);
+	zaman::h_imsak_td = safe_stoi_td(h_imsak, 0, 2, 2, 5);
+	zaman::h_sabah_td = safe_stoi_td(h_sabah, 0, 2, 2, 5);
+	zaman::h_gunes_td = safe_stoi_td(h_gunes, 0, 2, 2, 5);
+	zaman::h_israk_td = safe_stoi_td(h_israk, 0, 2, 2, 5);
+	zaman::h_kerahet_td = safe_stoi_td(h_kerahet, 0, 2, 3, 5);
+	zaman::h_ogle_td = safe_stoi_td(h_ogle, 0, 2, 3, 5);
+	zaman::h_ikindi_td = safe_stoi_td(h_ikindi, 0, 2, 3, 5);
+	zaman::h_asr_sani_td = safe_stoi_td(h_asr_sani, 0, 2, 3, 5);
+	zaman::h_isfirar_sems_td = safe_stoi_td(h_isfirar_sems, 0, 2, 3, 5);
+	zaman::h_kible_saati_td = safe_stoi_td(h_kible_saati, 0, 2, 3, 5);
 
 };
 void zaman::vkt_turk_v_d()
