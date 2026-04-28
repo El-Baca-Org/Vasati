@@ -241,9 +241,7 @@ zaman::zaman()
 	gos_turk_v();
 	gos_h_v();
 }
-zaman::~zaman()
-{
-}
+zaman::~zaman() = default;
 
 #endif
 
