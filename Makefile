@@ -1,6 +1,4 @@
-derle: init topla
-init:
-	mkdir -p lib
+derle: topla
 topla: main.o zaman.o pugi.o
 	g++ ./lib/main.o  ./lib/zaman.o ./lib/pugi.o -o Vasati
 
