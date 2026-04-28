@@ -14,7 +14,22 @@
 #ifndef SOURCE_ZAMAN_CPP
 #define SOURCE_ZAMAN_CPP
 
-#include "include-class/Zaman.hpp"
+#include "include-class/zaman.hpp"
+
+static inline int parse_time_to_minutes(const std::string& s) {
+	int h = 0, m = 0;
+	size_t i = 0;
+	while (i < s.length() && s[i] >= '0' && s[i] <= '9') {
+		h = h * 10 + (s[i] - '0');
+		i++;
+	}
+	if (i < s.length() && s[i] == ':') i++;
+	while (i < s.length() && s[i] >= '0' && s[i] <= '9') {
+		m = m * 10 + (s[i] - '0');
+		i++;
+	}
+	return h * 60 + m;
+}
 
 void zaman::tkvm_h_v_d()
 {
@@ -50,7 +65,7 @@ void zaman::tkvm_turk_v_d()
 void zaman::vkt_h_v_d()
 {
 
-	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
+	zaman::dosya_adresi    = "include/XML/vakitler.xml";
 	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
 	zaman::sehir           = dosya.child("cityinfo")   ;
 
@@ -82,20 +97,20 @@ void zaman::vkt_h_v_d()
 	zaman::h_isfirar_sems   = zaman::xml_bu_gun.substr(44, 6);
 	zaman::h_kible_saati    = zaman::xml_bu_gun.substr(74, 6);
 
-	zaman::h_aksam_td             = (std::stoi(h_aksam.substr(0, 2)) * 60)         + (std::stoi(h_aksam.substr(3, 5)))        ;
-	zaman::h_istibak_nucum_td     = (std::stoi(h_istibak_nucum.substr(0, 2)) * 60) + (std::stoi(h_istibak_nucum.substr(3, 5)));
-	zaman::h_yatsi_td             = (std::stoi(h_yatsi.substr(0, 2)) * 60)         + (std::stoi(h_yatsi.substr(3, 5)))        ;
-	zaman::h_isa_sani_td          = (std::stoi(h_isa_sani.substr(0, 2)) * 60)      + (std::stoi(h_isa_sani.substr(3, 5)))     ;
-	zaman::h_imsak_td             = (std::stoi(h_imsak.substr(0, 2)) * 60)         + (std::stoi(h_imsak.substr(2, 5)))        ;
-	zaman::h_sabah_td             = (std::stoi(h_sabah.substr(0, 2)) * 60)         + (std::stoi(h_sabah.substr(2, 5)))        ;
-	zaman::h_gunes_td             = (std::stoi(h_gunes.substr(0, 2)) * 60)         + (std::stoi(h_gunes.substr(2, 5)))        ;
-	zaman::h_israk_td             = (std::stoi(h_israk.substr(0, 2)) * 60)         + (std::stoi(h_israk.substr(2, 5)))        ;
-	zaman::h_kerahet_td           = (std::stoi(h_kerahet.substr(0, 2)) * 60)       + (std::stoi(h_kerahet.substr(3, 5)))      ;
-	zaman::h_ogle_td              = (std::stoi(h_ogle.substr(0, 2)) * 60)          + (std::stoi(h_ogle.substr(3, 5)))         ;
-	zaman::h_ikindi_td            = (std::stoi(h_ikindi.substr(0, 2)) * 60)        + (std::stoi(h_ikindi.substr(3, 5)))       ;
-	zaman::h_asr_sani_td          = (std::stoi(h_asr_sani.substr(0, 2)) * 60)      + (std::stoi(h_asr_sani.substr(3, 5)))     ;
-	zaman::h_isfirar_sems_td      = (std::stoi(h_isfirar_sems.substr(0, 2)) * 60)  + (std::stoi(h_isfirar_sems.substr(3, 5))) ;
-	zaman::h_kible_saati_td       = (std::stoi(h_kible_saati.substr(0, 2)) * 60)   + (std::stoi(h_kible_saati.substr(3, 5)))  ;
+	zaman::h_aksam_td             = parse_time_to_minutes(h_aksam)         ;
+	zaman::h_istibak_nucum_td     = parse_time_to_minutes(h_istibak_nucum) ;
+	zaman::h_yatsi_td             = parse_time_to_minutes(h_yatsi)         ;
+	zaman::h_isa_sani_td          = parse_time_to_minutes(h_isa_sani)      ;
+	zaman::h_imsak_td             = parse_time_to_minutes(h_imsak)         ;
+	zaman::h_sabah_td             = parse_time_to_minutes(h_sabah)         ;
+	zaman::h_gunes_td             = parse_time_to_minutes(h_gunes)         ;
+	zaman::h_israk_td             = parse_time_to_minutes(h_israk)         ;
+	zaman::h_kerahet_td           = parse_time_to_minutes(h_kerahet)       ;
+	zaman::h_ogle_td              = parse_time_to_minutes(h_ogle)          ;
+	zaman::h_ikindi_td            = parse_time_to_minutes(h_ikindi)        ;
+	zaman::h_asr_sani_td          = parse_time_to_minutes(h_asr_sani)      ;
+	zaman::h_isfirar_sems_td      = parse_time_to_minutes(h_isfirar_sems)  ;
+	zaman::h_kible_saati_td       = parse_time_to_minutes(h_kible_saati)   ;
 
 };
 void zaman::vkt_turk_v_d()
