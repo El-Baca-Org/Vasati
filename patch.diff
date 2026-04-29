@@ -1,0 +1,15 @@
+--- include/include-class/Zaman.hpp
++++ include/include-class/Zaman.hpp
+@@ -27,10 +27,11 @@
+	//------------------------------------------------------------------------------
+	//ASAGIDAKI DEGISKENLER DOSYA ISLEMLERIYLE ILISKILIDIR;
+	//------------------------------------------------------------------------------
+-	pugi::xml_document dosya;
++	static pugi::xml_document dosya;
+	const char* dosya_adresi;
+	const char* bu_gun_const;
+-	pugi::xml_node sehir;
++	static pugi::xml_node sehir;
++	static bool dosya_yuklendi;
+	std::string bu_gun_deger;
+	std::string xml_bu_gun;

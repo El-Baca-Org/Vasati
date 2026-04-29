@@ -1,0 +1,28 @@
+--- src/src-class/Zaman.cpp
++++ src/src-class/Zaman.cpp
+@@ -16,6 +16,10 @@
+
+ #include "include-class/Zaman.hpp"
+
++pugi::xml_document zaman::dosya;
++pugi::xml_node zaman::sehir;
++bool zaman::dosya_yuklendi = false;
++
+ void zaman::tkvm_h_v_d()
+ {
+	//zaman paketinin temel verileri;
+@@ -74,9 +78,12 @@
+ void zaman::vkt_h_v_d()
+ {
+
+-	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
+-	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
+-	zaman::sehir           = dosya.child("cityinfo")   ;
++	if (!zaman::dosya_yuklendi) {
++		zaman::dosya_adresi    = "include/XML/Vakitler.xml";
++		zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
++		zaman::sehir           = dosya.child("cityinfo")   ;
++		zaman::dosya_yuklendi  = true;
++	}
+
+	char buffer[5];
