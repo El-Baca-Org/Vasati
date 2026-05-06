@@ -74,14 +74,25 @@ void zaman::vkt_h_v_d()
 {
 
 	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
-	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
-	zaman::sehir           = dosya.child("cityinfo")   ;
 
-	char buffer[5];
+	// ⚡ Bolt: Lazy load XML database once to prevent severe I/O bottlenecks
+	static const pugi::xml_document& shared_doc = []() -> const pugi::xml_document& {
+		static pugi::xml_document doc;
+		if (!doc.load_file("include/XML/Vakitler.xml")) {
+			throw std::runtime_error("XML database file missing or invalid: include/XML/Vakitler.xml");
+		}
+		return doc;
+	}();
 
-	std::sprintf             (buffer, "%d", zaman::h_rakam_gun_senenin);
-	const char *h_rakam_gun_senenin_string  = buffer                   ;
-	zaman::xml_bu_gun        = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string).text().get();
+	zaman::sehir = shared_doc.child("cityinfo");
+	if (!zaman::sehir) {
+		throw std::runtime_error("Missing cityinfo node in XML");
+	}
+
+	std::string gun_str = std::to_string(zaman::h_rakam_gun_senenin);
+	pugi::xml_node node_bugun = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", gun_str.c_str());
+	if (!node_bugun) throw std::runtime_error("Missing prayertimes node for today");
+	zaman::xml_bu_gun = node_bugun.text().get();
 
 	zaman::h_aksam         = zaman::xml_bu_gun.substr(50, 6);
 	zaman::h_istibak_nucum = zaman::xml_bu_gun.substr(56, 6);
@@ -90,9 +101,10 @@ void zaman::vkt_h_v_d()
 
 	//buradaka kodları yeniliyoruz çünkü bir sonraki gün kılacağız verileri:
 
-	std::sprintf               (buffer, "%d", (zaman::h_rakam_gun_senenin + 1));
-	h_rakam_gun_senenin_string = buffer;
-	zaman::xml_bu_gun          = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string).text().get();
+	std::string yarin_str = std::to_string(zaman::h_rakam_gun_senenin + 1);
+	pugi::xml_node node_yarin = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", yarin_str.c_str());
+	if (!node_yarin) throw std::runtime_error("Missing prayertimes node for tomorrow");
+	zaman::xml_bu_gun = node_yarin.text().get();
 
 	zaman::h_imsak          = zaman::xml_bu_gun.substr(0, 4) ;
 	zaman::h_sabah          = zaman::xml_bu_gun.substr(5, 5) ;

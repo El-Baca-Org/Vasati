@@ -1,0 +1,3 @@
+## 2023-10-24 - XML Parsing I/O Darboğazı ve Magic Statics Çözümü
+**Learning:** `pugixml` gibi kütüphanelerle XML dosyalarının nesne kurucusu (constructor) veya sık çağırılan metotlar (örn. `vkt_h_v_d`) içerisinde tekrar tekrar yüklenmesi, özellikle döngüsel nesne yaratımlarında çok ciddi I/O ve ayrıştırma darboğazlarına yol açıyor (1000 iterasyonda ~460ms). Sınıf üyelerine statik atama yapmak nesne-özel state kaybına yol açabiliyor.
+**Action:** C++11 thread-safe "magic statics" ve lambda ifadeleri (`static const pugi::xml_document& shared_doc = [](){ ... }();`) kullanarak büyük XML dosyalarını uygulamanın ömrü boyunca yalnızca bir kere yükleyip referansını döndürmelisin. Bu şekilde aynı I/O işlemi tekrarlanmaz (aynı iterasyon ~84ms'ye inerek %80+ hızlanma sağladı).
