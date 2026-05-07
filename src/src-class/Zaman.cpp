@@ -74,8 +74,16 @@ void zaman::vkt_h_v_d()
 {
 
 	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
-	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
-	zaman::sehir           = dosya.child("cityinfo")   ;
+	// ⚡ Bolt İyileştirmesi: Her nesne oluşturulmasında dosya okumasını ve XML parse işlemini engellemek için
+	// C++11 "magic statics" (thread-safe) yöntemi ile XML verisi yalnızca ilk çağrıda yüklenir ve önbelleğe alınır.
+	static const pugi::xml_node cached_sehir = []() {
+		static pugi::xml_document doc;
+		if (!doc.load_file("include/XML/Vakitler.xml") && !doc.load_file("vakitler.xml")) {
+			throw std::runtime_error("XML hatası: Vakitler.xml yüklenemedi");
+		}
+		return doc.child("cityinfo");
+	}();
+	zaman::sehir = cached_sehir;
 
 	char buffer[5];
 
