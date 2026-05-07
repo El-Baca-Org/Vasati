@@ -1,3 +1,4 @@
+#include <stdexcept>
 /**
  * -e-
  *
@@ -28,7 +29,7 @@ public:
 	//------------------------------------------------------------------------------
 	//ASAGIDAKI DEGISKENLER DOSYA ISLEMLERIYLE ILISKILIDIR;
 	//------------------------------------------------------------------------------
-	pugi::xml_document dosya;
+
 	const char* dosya_adresi;
 	const char* bu_gun_const;
 	pugi::xml_node sehir;
