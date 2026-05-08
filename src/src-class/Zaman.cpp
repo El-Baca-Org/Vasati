@@ -74,8 +74,19 @@ void zaman::vkt_h_v_d()
 {
 
 	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
-	zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
-	zaman::sehir           = dosya.child("cityinfo")   ;
+
+	static const pugi::xml_node cached_sehir = []() {
+		static pugi::xml_document doc;
+		if (!doc.load_file("include/XML/Vakitler.xml") && !doc.load_file("vakitler.xml")) {
+			throw std::runtime_error("XML load failed");
+		}
+		pugi::xml_node node = doc.child("cityinfo");
+		if (!node) {
+			throw std::runtime_error("Missing cityinfo node");
+		}
+		return node;
+	}();
+	zaman::sehir = cached_sehir;
 
 	char buffer[5];
 
