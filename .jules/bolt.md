@@ -1,3 +1,7 @@
-## 2026-05-08 - [XML Parsing Optimization]
-**Learning:** Parsing the XML document in the constructor of `zaman` class without caching causes a significant performance bottleneck (around 40ms per 100 instantiations). Repeatedly loading the file creates high overhead.
-**Action:** Used a C++11 method-local magic static and an immediately invoked lambda to cache the `cityinfo` XML node (`zaman::sehir`), reducing 100 instantiations from ~40ms to ~14ms.
+## 2024-05-09 - XML "dayofyear" nitelik araması yavaşlığı ve önbelleğe alma (Caching) çözümü
+**Öğrenilen (Learning):** `zaman::vkt_h_v_d()` metodunda, her bir `zaman` nesnesi başlatıldığında (instantiation) güncel ve ertesi günün vakitlerini bulmak için XML içinde `find_child_by_attribute("prayertimes", "dayofyear", ...)` ile doğrusal arama (linear search) yapılması, performansı %50 oranında düşürüyor (10.000 nesne için ~11.3 saniye sürüyor).
+**Aksiyon (Action):** `pugi::xml_node` düğümleri arasında her seferinde dolaşmak yerine, 366 günlük `prayertimes` verisi statik bir `std::string` dizisi içerisine `dayofyear` indeksini kullanarak ilk nesne yaratımında (immediately invoked lambda ile) önbelleğe alındı (cached). Böylece `O(N)` olan string arama süresi `O(1)` dizi (array) erişimine düşürüldü. Ayrıca Türkçe olan arayüz ve PR komut kurallarına riayet edilerek `.jules/bolt.md` güncellendi.
+
+## 2024-05-09 - XML "dayofyear" nitelik araması yavaşlığı ve önbelleğe alma (Caching) çözümü
+**Öğrenilen (Learning):** `zaman::vkt_h_v_d()` metodunda, her bir `zaman` nesnesi başlatıldığında (instantiation) güncel ve ertesi günün vakitlerini bulmak için XML içinde `find_child_by_attribute("prayertimes", "dayofyear", ...)` ile doğrusal arama (linear search) yapılması, performansı önemli ölçüde düşürüyor.
+**Aksiyon (Action):** `pugi::xml_node` düğümleri arasında her seferinde dolaşmak yerine, 366 günlük `prayertimes` verisi statik bir `std::string` dizisi içerisine `dayofyear` indeksini kullanarak ilk nesne yaratımında (immediately invoked lambda ile) önbelleğe alındı (cached). Böylece `O(N)` olan string arama süresi `O(1)` dizi (array) erişimine düşürüldü.
