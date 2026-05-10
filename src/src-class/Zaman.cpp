@@ -75,7 +75,7 @@ void zaman::vkt_h_v_d()
 
 	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
 
-	static const pugi::xml_node cached_sehir = []() {
+	static const pugi::xml_node* cached_nodes = []() {
 		static pugi::xml_document doc;
 		if (!doc.load_file("include/XML/Vakitler.xml") && !doc.load_file("vakitler.xml")) {
 			throw std::runtime_error("XML load failed");
@@ -84,15 +84,25 @@ void zaman::vkt_h_v_d()
 		if (!node) {
 			throw std::runtime_error("Missing cityinfo node");
 		}
-		return node;
+
+		// ⚡ Bolt Optimizasyonu: XML düğümlerini 'dayofyear' özniteliğine göre önbelleğe alarak O(1) erişim sağla (O(N) doğrusal arama yerine)
+		// Her nesne örneği oluşturulduğunda O(N) doğrusal arama darboğazını ortadan kaldırır
+		static pugi::xml_node nodes[400];
+		for (pugi::xml_node pt = node.child("prayertimes"); pt; pt = pt.next_sibling("prayertimes")) {
+			int day = pt.attribute("dayofyear").as_int(-1);
+			if (day >= 0 && day < 400) {
+				nodes[day] = pt;
+			}
+		}
+		return nodes;
 	}();
-	zaman::sehir = cached_sehir;
 
-	char buffer[5];
+	zaman::sehir = cached_nodes[0].parent();
 
-	std::sprintf             (buffer, "%d", zaman::h_rakam_gun_senenin);
-	const char *h_rakam_gun_senenin_string  = buffer                   ;
-	zaman::xml_bu_gun        = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string).text().get();
+	int current_day = zaman::h_rakam_gun_senenin;
+	if (current_day >= 0 && current_day < 400 && cached_nodes[current_day]) {
+		zaman::xml_bu_gun = cached_nodes[current_day].text().get();
+	}
 
 	zaman::h_aksam         = zaman::xml_bu_gun.substr(50, 6);
 	zaman::h_istibak_nucum = zaman::xml_bu_gun.substr(56, 6);
@@ -101,9 +111,10 @@ void zaman::vkt_h_v_d()
 
 	//buradaka kodları yeniliyoruz çünkü bir sonraki gün kılacağız verileri:
 
-	std::sprintf               (buffer, "%d", (zaman::h_rakam_gun_senenin + 1));
-	h_rakam_gun_senenin_string = buffer;
-	zaman::xml_bu_gun          = zaman::sehir.find_child_by_attribute("prayertimes", "dayofyear", h_rakam_gun_senenin_string).text().get();
+	int next_day = zaman::h_rakam_gun_senenin + 1;
+	if (next_day >= 0 && next_day < 400 && cached_nodes[next_day]) {
+		zaman::xml_bu_gun = cached_nodes[next_day].text().get();
+	}
 
 	zaman::h_imsak          = zaman::xml_bu_gun.substr(0, 4) ;
 	zaman::h_sabah          = zaman::xml_bu_gun.substr(5, 5) ;
