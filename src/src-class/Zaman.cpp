@@ -76,13 +76,18 @@ std::string zaman::td_to_vakt(unsigned int td)
 void zaman::vkt_h_v_d()
 {
 
-	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
 	static bool is_loaded = false;
+	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
+	// Performans optimizasyonu: Vakitler.xml dosyasi cok buyuk oldugu icin
+	// her nesne olusturuldugunda tekrar tekrar parse edilmesini onlemek uzere
+	// lazy initialization (tembel ilklendirme) yontemi kullanildi.
 	if (!is_loaded) {
 		zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
 		zaman::sehir           = dosya.child("cityinfo")   ;
 		is_loaded = true;
 	}
+
+	char buffer[5];
 
 	static const pugi::xml_node* cached_nodes = []() {
 		static pugi::xml_document doc;
