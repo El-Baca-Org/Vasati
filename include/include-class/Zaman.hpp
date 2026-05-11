@@ -28,9 +28,10 @@ public:
 	//------------------------------------------------------------------------------
 	//ASAGIDAKI DEGISKENLER DOSYA ISLEMLERIYLE ILISKILIDIR;
 	//------------------------------------------------------------------------------
+	static pugi::xml_document dosya;
 	const char* dosya_adresi;
 	const char* bu_gun_const;
-	pugi::xml_node sehir;
+	static pugi::xml_node sehir;
 	std::string bu_gun_deger;
 	std::string xml_bu_gun;
 

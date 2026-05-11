@@ -16,6 +16,9 @@
 
 #include "include-class/Zaman.hpp"
 
+pugi::xml_document zaman::dosya;
+pugi::xml_node zaman::sehir;
+
 void zaman::tkvm_h_v_d()
 {
 	//zaman paketinin temel verileri;
@@ -74,6 +77,12 @@ void zaman::vkt_h_v_d()
 {
 
 	zaman::dosya_adresi    = "include/XML/Vakitler.xml";
+	static bool is_loaded = false;
+	if (!is_loaded) {
+		zaman::dosya.load_file(  zaman::dosya_adresi  )    ;
+		zaman::sehir           = dosya.child("cityinfo")   ;
+		is_loaded = true;
+	}
 
 	static const pugi::xml_node* cached_nodes = []() {
 		static pugi::xml_document doc;
