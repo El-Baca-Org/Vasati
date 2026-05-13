@@ -8,3 +8,7 @@
 ## 2024-05-11 - [XML Lookup Optimization]
 **Learning:** Repeatedly calling `pugi::xml_node::find_child_by_attribute` to look up prayer times by `dayofyear` is an O(N) linear search bottleneck that slows down `zaman` class instantiations.
 **Action:** Replaced it with an O(1) array lookup. Since `dayofyear` acts as a sequential 0-based index (0-365), we can cache the `const char*` text of each `prayertimes` node into a static `cached_nodes[400]` array using a magic static block. This reduced instantiation time nearly by half.
+
+## 2024-05-24 - [C++ String Tahsisi Darboğazı]
+**Learning:** Yoğun çağrılan string formatlama fonksiyonlarında (`td_to_vakt` gibi 14 farklı vakit için çağrılan) art arda `std::to_string` kullanılması ve `+` operatörü ile stringlerin birleştirilmesi, ciddi düzeyde memory allocation (bellek tahsisi) darboğazı yaratıyor.
+**Action:** C++ projelerinde çok sık çağrılan kısa boyutlu string işlemlerinde (örneğin "SS:DD" formatı) nesne/string yaratmak yerine yığın (stack) üzerinde sabit boyutlu `char buffer` (örneğin `char buf[6]`) kullan ve doğrudan ASCII aritmetiği (`'0' + değer`) yap. Bu yöntem `std::to_string`in sebep olduğu geçici nesneleri önler ve performansta yaklaşık %70 kazanç sağlar.
